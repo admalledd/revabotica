@@ -1,0 +1,34 @@
+map data structure:::
+
+class map(object):
+    def __init__(self,fsobj):
+        #fsobj is pyfs dir ending in .map see map save format.
+        self.load_from_dir(fsobj) #magic
+        self.elayers=(layobj1,layobj2)#low to high
+        self.tlayers=(tobj1,tobj2)#low to high, last is top layer.
+        #len(self.elayers) == len(self.tlayers)
+        self.layers=magiks.dual_list(self.elayers,self.tlayers)
+
+     
+    def add_layer(self,entity=None,tile=None):
+        if entity == None and tile == None:
+            raise Error("both cannot be none")
+        #more magiks. self.layes must be iterable
+
+
+map save format:::
+~~~.map  #pyfs openable dir for reading (zipfile,http,anything really)
+    config.json #map size, tile setup, tilegrid size (bytes per tile, layers ect...)
+    tile_layers/ #merged pyfs mount, updated files stored elsewhere. stores all tile data
+        `LID`.grid #n*x*y byte .zip file of tiles where n is bytes per tile
+        `LID`.json #config for a single layer (over-rides main config.json settings)
+        `LID`.py   #python script with callback/event listeners that can change the grid.
+    entities.json #general entity config file
+    entity_layers/ #merged pyfs mount, updated files stored elsewhere. stores all entity data
+        `EID`.json #config file with at least 'name','x','y'
+        `EID`.py   #python file with coustom code, note that this can only be loaded from ~~~.map, not the state folder! (security)
+    robots.json #general robot configurations
+    robots/ #merged pyfs mount, update files stored elsewhere. stores all robot data. 
+        `RID`.json  #robot config, stores user "program" here, other things as well.
+        `RID`.py    #robot code, again note that all .py files can only be loaded from ~~~.map, however note that sharing of a .py file is expected
+        
