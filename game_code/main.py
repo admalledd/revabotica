@@ -1,5 +1,4 @@
-
-
+import map
 
 def main():
-	print "hello world 32"
+	m=map.map('./maps/test1.map')	

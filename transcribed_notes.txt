@@ -1,20 +1,5 @@
 map data structure:::
 
-class map(object):
-    def __init__(self,fsobj):
-        #fsobj is pyfs dir ending in .map see map save format.
-        self.load_from_dir(fsobj) #magic
-        self.elayers=(layobj1,layobj2)#low to high
-        self.tlayers=(tobj1,tobj2)#low to high, last is top layer.
-        #len(self.elayers) == len(self.tlayers)
-        self.layers=magiks.dual_list(self.elayers,self.tlayers)
-
-     
-    def add_layer(self,entity=None,tile=None):
-        if entity == None and tile == None:
-            raise Error("both cannot be none")
-        #more magiks. self.layes must be iterable
-
 
 map save format:::
 ~~~.map  #pyfs openable dir for reading (zipfile,http,anything really)

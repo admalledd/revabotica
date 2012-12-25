@@ -1,23 +1,25 @@
 {
-	"folders":
-	[
-		{
-			"path": "/C/code/revabotica"
-		}
-	],
-	"build_systems":
+    "build_systems":
     [
         {
             "name": "py_main",
             "target": "subprocess_build",
-
             "windows":
             {
-	            "exe": "C:\\python27\\python.exe",
-	            "fname":"C:\\code\\revabotica\\main.py",
-	            "curdir":"C:\\code\\revabotica\\"
-	            
+                "curdir": "C:\\code\\revabotica\\",
+                "exe": "C:\\python27\\python.exe",
+                //"clean_localdir": "revabotica",
+                "fname": "C:\\code\\revabotica\\main.py"
             }
+        }
+    ],
+    "folders":
+    [
+        {
+            "path": "/C/code/revabotica"
+        },
+        {
+            "path": "/C/Users/admalledd/AppData/Roaming/revabotica"
         }
     ]
 }
