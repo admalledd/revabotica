@@ -1,0 +1,23 @@
+{
+	"folders":
+	[
+		{
+			"path": "/C/code/revabotica"
+		}
+	],
+	"build_systems":
+    [
+        {
+            "name": "py_main",
+            "target": "subprocess_build",
+
+            "windows":
+            {
+	            "exe": "C:\\python27\\python.exe",
+	            "fname":"C:\\code\\revabotica\\main.py",
+	            "curdir":"C:\\code\\revabotica\\"
+	            
+            }
+        }
+    ]
+}
