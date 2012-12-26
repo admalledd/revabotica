@@ -8,18 +8,29 @@
             {
                 "curdir": "C:\\code\\revabotica\\",
                 "exe": "C:\\python27\\python.exe",
-                //"clean_localdir": "revabotica",
                 "fname": "C:\\code\\revabotica\\main.py"
+            },
+            "linux":
+            {
+                "curdir": "/home/admalledd/Documents/code/python/revabotica/",
+                "exe": "/home/admalledd/bin/pypy",
+                "fname": "/home/admalledd/Documents/code/python/revabotica/main.py"
             }
         }
     ],
     "folders":
     [
         {
-            "path": "/C/code/revabotica"
+            "path": "./",
+            "name": "game_root"
         },
         {
-            "path": "/C/Users/admalledd/AppData/Roaming/revabotica"
+            "path": "/C/Users/admalledd/AppData/Roaming/revabotica",
+            "name": "win_local_files"
+        },
+        {
+            "path": "/home/admalledd/.local/share/revabotica",
+            "name": "linux_local_files"
         }
     ]
 }
