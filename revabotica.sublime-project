@@ -25,12 +25,12 @@
             "name": "game_root"
         },
         {
-            "path": "/C/Users/admalledd/AppData/Roaming/revabotica",
-            "name": "win_local_files"
-        },
-        {
             "path": "/home/admalledd/.local/share/revabotica",
             "name": "linux_local_files"
+        },
+        {
+            "path": "/C/Users/admalledd/AppData/Roaming/revabotica",
+            "name": "win_local_files"
         }
     ]
 }
