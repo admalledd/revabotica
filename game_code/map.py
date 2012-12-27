@@ -53,12 +53,19 @@ class map(object):
         if type(default) == list:
             logger.info('loading default "%s.grid" as "full"'%gid)
             default=self.load_grid_full(default)
-
+            print default
 
     def load_grid_full(self,gridlist):
         """load a grid based on a 2d list of dictionaries, see docs/grid_format.markdown for more info"""
         
-        
+        grid=[]
+        for x,row in enumerate(gridlist):
+            grid.append([])
+            for y,cell in enumerate(row):
+                grid[x].append(cell)
+            grid[x]=tuple(grid[x])
+        grid = tuple(grid)
+        return grid
 
     def load_json(self,name,autocreate=True):
         '''loads cfg in the order of: default, u#'s then "local"'''
