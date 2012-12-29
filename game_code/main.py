@@ -1,14 +1,12 @@
 import os
 import logging
 
-import fs.osfs
-
 import map
 import lib.common
 
 ##bad global ish stuff here (should not need global state, this is for global logging, fsobj ect)
 
-log_name=os.path.join(lib.common.localdir,'revabotica.log')
+log_name=os.path.join(lib.common.savedir,'revabotica.log')
 # set up logging to file
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
@@ -27,9 +25,8 @@ logging.getLogger('').addHandler(console)
 logger = logging.getLogger('main')
 logger.info('logger set. logging to file:"%s"'%(log_name))
 logger.debug('current path: %s'%os.getcwd())
-logger.debug('currect localdir: %s'%lib.common.localdir)
+logger.debug('currect savedir: %s'%lib.common.savedir)
 
-lib.common.rootfs=fs.osfs.OSFS('./')#hard coded local for now...
 
 def main():
 	m=map.map('maps/test1.map')

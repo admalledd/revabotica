@@ -2,12 +2,28 @@ import sys,os
 import logging
 logger = logging.getLogger('lib.common')
 
-if sys.platform == 'win32':
-    localdir=os.path.expandvars('$APPDATA\\revabotica\\')
-else:
-    #TODO:: check for correct save locations on linux/macosx
-    localdir=os.path.expanduser('~/.local/share/revabotica/')
+import fs.osfs
+import fs.path
+import fs.opener
+import fs.mountfs
+import fs.multifs
 
+if sys.platform == 'win32':
+    savedir=os.path.expandvars('$APPDATA\\revabotica\\')
+else:
+    ##TODO:: check if this is the correct save location on MACOSX
+    savedir=os.path.expanduser('~/.local/share/revabotica/')
+
+rootfs =fs.mountfs.MountFS()
+rootfs.mountdir('default',fs.osfs.OSFS('./'))
+rootfs.mountdir('custom',fs.opener.opener.opendir('./custom'))
+#start with setting to same as default, option later to load new path.
+#plan is to have localpath be "http://www.admalledd.com/revabotica" when ready.
+rootfs.mountdir('saves',fs.osfs.OSFS(os.path.join(savedir,'saves'),create=True))
+
+saveid = 'savetest1'#current save name.
+
+#see if we can move all of this stuff to loaders.py, in theory nothing else should need this info.
 
 def p_rents(lo):
     '''

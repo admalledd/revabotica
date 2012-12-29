@@ -9,7 +9,7 @@
 
 `tile_dict = {'tid':'???','dat':$numbers}`
 
-`self.addlayer(grid=???,ents=???)`
+`self.addlayer(grid=???,ents=???)` adds to top of layers (`self.layers.append(grid,ents)`)
 
 `self.get_xy(x,y)` return slice of self.layers for just that xy coord
 
