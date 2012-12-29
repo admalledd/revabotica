@@ -1,6 +1,6 @@
 the grid format is json, with two major ways to store the data: 
 
-1. sparse, where each entry has a x,y data point as well.
+1. sparse, where each key is str() of the location ({"x,y":tile})
 
 2. full grid, loaded in order of `[[row],[row],[row]]`
 

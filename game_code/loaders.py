@@ -127,19 +127,58 @@ class grid_loader(json_loader):
         self.tile_defaults = mapobj.settings["tile_defaults"]
 
         self.grid = {}
-        grid_path = fs.path.join('grid','%s.grid'%gid)
-        default =self.load_json_ro(grid_path) error out here, need to load better thingsyness
-        print default
+        self.gid = gid
+        self.load_grid()
+
+    def load_grid(self):
+        grid_path = fs.path.join('grid','%s.grid'%self.gid)
+        
+        default = self.load_json_ro(fs.path.join('default',grid_path))
+
         if type(default) == list:
-            logger.info('loading default "%s.grid" as "full"'%gid)
-            default=self.load_grid_full(default)
-            
-    def load_grid(self,grid_path):
-        pass
+            logger.info('loading default "%s" as "full"'%grid_path)
+            self.load_grid_full(default)
+        elif type(default) == dict and default != {}:
+            logger.info('loading default "" as "sparse"'%grid_path)
+            self.load_grid_sparse(default)
+        else:   
+            logger.info('no/bad grid data in default folder')
+
+        custom = self.load_json_ro(fs.path.join('custom',grid_path))
+        
+        if type(custom) == list:
+            logger.info('loading custom "%s" as "full"'%grid_path)
+            self.load_grid_full(custom)
+        elif type(custom) == dict and custom != {}:
+            logger.info('loading custom "%s" as "sparse"'%grid_path)
+            self.load_grid_sparse(custom)
+        else:
+            logger.info('no/bad grid data in custom folder')
+        saved = self.load_json_ro(fs.path.join('save',grid_path))
+
+        if type(saved) == list:
+            logger.info('loading saved "%s" as "full"'%grid_path)
+            self.load_grid_full(saved)
+        elif type(saved) == dict and saved != {}:
+            logger.info('loading saved "%s" as "sparse"'%grid_path)
+            self.load_grid_sparse(saved)
+        else:   
+            logger.info('no/bad grid data in save folder')
 
     def load_grid_full(self,gridlist):
         """load a grid based on a 2d list of dictionaries, see docs/grid_format.markdown for more info"""
         
         for x,row in enumerate(gridlist):
             for y,cell in enumerate(row):
-                self.grid[(x,y)]=cell
+                self.grid[(x,y)]=self.verify_tile(cell)
+
+    def load_grid_sparse(self,griddict):
+        """load a grid from a dictionary of dictionaries"""
+        for key,cell in griddict.iteritems():
+            x,y=key.split(',')
+            x,y = int(x),int(y)
+            self.grid[(x,y)]=self.verify_tile(cell)
+
+    def verify_tile(self,tile):
+        '''verify that the tile has all the stuff needed, load in defaults if not.'''
+        return self.merge_json(self.tile_defaults,tile)

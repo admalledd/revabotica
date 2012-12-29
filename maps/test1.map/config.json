@@ -1,4 +1,6 @@
 {
     "tile_defaults":{"tid":"0","dat":0},
-    "map_name":"Example map."
+    "map_name":"Example map.",
+    "size_x":100,
+    "size_y":100
 }
