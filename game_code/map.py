@@ -28,6 +28,8 @@ class map(object):
 
     	#load config files
     	self.settings=loaders.load_json(self.fsobj,'config.json')
+        
+        self.add_layer(loaders.load_grid(self,0),loaders.load_ents(self,0))
 
-        print loaders.load_grid(self,0)
-
+    def add_layer(self,grid,ent):
+        print ent

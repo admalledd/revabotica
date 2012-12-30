@@ -40,13 +40,16 @@ def open_fspaths(fspath):
     return fsobj
 
 
-def load_grid(pyfsobj,gid):
+def load_grid(mapobj,gid):
     'convenience helper for loading grid-formated json files'
-    return grid_loader(pyfsobj,gid).grid
+    return grid_loader(mapobj,gid).grid
 
 def load_json(pyfsobj,path):
     'convenience helper for loading normal json files'
     return json_loader(pyfsobj).load_json(path)
+
+def load_ents(mapobj,layer_id):
+    return entity_loader(mapobj,layer_id).entities
 
 class json_loader(object):
     def __init__(self,pyfsobj):
@@ -133,41 +136,20 @@ class grid_loader(json_loader):
     def load_grid(self):
         grid_path = fs.path.join('grid','%s.grid'%self.gid)
         
-        default = self.load_json_ro(fs.path.join('default',grid_path))
+        for subfs in ('default','custom','save'):
+            js = self.load_json_ro(fs.path.join(subfs,grid_path))
 
-        if type(default) == list:
-            logger.info('loading default "%s" as "full"'%grid_path)
-            self.load_grid_full(default)
-        elif type(default) == dict and default != {}:
-            logger.info('loading default "" as "sparse"'%grid_path)
-            self.load_grid_sparse(default)
-        else:   
-            logger.info('no/bad grid data in default folder')
-
-        custom = self.load_json_ro(fs.path.join('custom',grid_path))
-        
-        if type(custom) == list:
-            logger.info('loading custom "%s" as "full"'%grid_path)
-            self.load_grid_full(custom)
-        elif type(custom) == dict and custom != {}:
-            logger.info('loading custom "%s" as "sparse"'%grid_path)
-            self.load_grid_sparse(custom)
-        else:
-            logger.info('no/bad grid data in custom folder')
-        saved = self.load_json_ro(fs.path.join('save',grid_path))
-
-        if type(saved) == list:
-            logger.info('loading saved "%s" as "full"'%grid_path)
-            self.load_grid_full(saved)
-        elif type(saved) == dict and saved != {}:
-            logger.info('loading saved "%s" as "sparse"'%grid_path)
-            self.load_grid_sparse(saved)
-        else:   
-            logger.info('no/bad grid data in save folder')
+            if type(js) == list:
+                logger.info('loading %s "%s" as "full"'%(subfs,grid_path))
+                self.load_grid_full(js)
+            elif type(js) == dict and js != {}:
+                logger.info('loading %s "%s" as "sparse"'%(subfs,grid_path))
+                self.load_grid_sparse(js)
+            else:   
+                logger.info('no/bad grid data in %s subfs'%subfs)
 
     def load_grid_full(self,gridlist):
         """load a grid based on a 2d list of dictionaries, see docs/grid_format.markdown for more info"""
-        
         for x,row in enumerate(gridlist):
             for y,cell in enumerate(row):
                 self.grid[(x,y)]=self.verify_tile(cell)
@@ -182,3 +164,7 @@ class grid_loader(json_loader):
     def verify_tile(self,tile):
         '''verify that the tile has all the stuff needed, load in defaults if not.'''
         return self.merge_json(self.tile_defaults,tile)
+
+class entity_loader(json_loader):
+    def __init__(self,mapobj,layer_id):
+        self.entities = {}
