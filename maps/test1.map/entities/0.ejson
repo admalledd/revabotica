@@ -1,9 +1,12 @@
 {
-    "code_class":"part",
+ "scrap_test":{
+    "code_class":"part.scrap",
     "data":{
+        "x":0,"y":0,
         "img":"img/entities/parts/scrap1.png",
         "lang_file":"parts/scrap1.json",
         "amount":15
     }
 
+  }
 }

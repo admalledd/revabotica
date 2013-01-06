@@ -1,4 +1,4 @@
-data is saved as json. see relevent examples and other docs for what info is stored where. this talks about how it is all saved, where, and why.
+data is saved as json. see relevant examples and other docs for what info is stored where. this talks about how it is all saved, where, and why.
 
 there is a basic idea: load multiple json sources and merge them together. the different sources are under the pyfsobj under these names and are loaded in this order:
 
@@ -28,12 +28,10 @@ directory layout:
         |   `-- sfx
         |-- config.json
         |-- entities
-        |   |-- 0
-        |   |   `-- (0,0).json
+        |   |-- 0.ejson
         |   `-- entities.json
         |-- grid
-        |   |-- 0.grid
-        |   `-- 0.py
+        |   `-- 0.grid
         `-- robots
             |-- 0
             |   `-- (0,0).json
@@ -49,3 +47,5 @@ note that sometimes special care is needed to merge the different files, so we h
 
 
 ok, now onto loading assets: these are basically any file that is not in JSON format / does not need merging with other files. so what happens here is that we use a `fs.multifs` that is loaded in the same order as above, then merged into the single `fs.mountfs` as the `assets` directory.
+
+Note for loading / saving of entities: due the fact that entities can move about, each entity must have a 100% unique $EID. This $EID is a json string in the .ejson files. (random generation?). The entity JSON files are all copied over to the $savename and loaded from there, if they already exist, load those. this prevents the whole headache of adding / removing entities as the game plays on.

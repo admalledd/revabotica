@@ -34,9 +34,10 @@ def open_fspaths(fspath):
     fsobj.mountdir('default',open_dir('default'))
     fsobj.mountdir('custom',open_dir('custom'))
     fsobj.mountdir('save',open_dir(fs.path.join('saves',lib.common.saveid),True))
-    multifs = fs.multifs.MultiFS()
-    multifs.addfs('default',fs.opener.opener.opendir(fspath))
-    #fsobj.tree()
+    ##TODO: add asset directories. (lang files, art, ect. basically any non-code and non-data)
+    #multifs = fs.multifs.MultiFS()
+    #multifs.addfs('default',)
+    ##fsobj.tree()
     return fsobj
 
 
@@ -71,12 +72,13 @@ class json_loader(object):
         return merged
 
     def load_json_single(self,fspath):
-        '''load one json file, checking if it exists, if it fails for some reason, return {}'''
+        '''load one json file, checking if it exists, if it fails for some reason, return None'''
         try:
             return json.load(self.pyfsobj.open(fspath))
         except fs.errors.ResourceNotFoundError as e:
             if self.allow_fail:
-                return {}
+                #logger.info('no json file "%s", ignoring'%fspath)
+                return None
             else:
                 raise
 
@@ -91,23 +93,6 @@ class json_loader(object):
             logger.error('not known if this is reachable code...')
             raise
         return default
-
-    def load_json_rw(self,name):
-        '''loads json file of $name, if it does not exist, create it.'''
-        local = self.load_json_single(fs.path.join('local',name))
-        if local == None:
-            #could not open file, no local copy exists. create a blank one and use that
-            logger.info('no local version of "%s", creating blank'%name)
-            f=self.fsobj.open(fs.path.join('local',name),'w')
-            f.write('{}')
-            f.flush()
-            f.close()
-            return {}
-        elif local == None:
-            logger.info('no local version of "%s"'%name)
-            return {}
-        else:
-            return local
 
     def merge_json(self,*args):
         merged = {}
@@ -168,3 +153,12 @@ class grid_loader(json_loader):
 class entity_loader(json_loader):
     def __init__(self,mapobj,layer_id):
         self.entities = {}
+
+        json_loader.__init__(self,mapobj.fsobj)
+
+        e_path = fs.path.join('entities','%s.ejson'%layer_id)
+
+        for subfs in ('default','custom','save'):
+            js = self.load_json_ro(fs.path.join(subfs,e_path))
+            print js
+
