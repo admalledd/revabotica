@@ -1,15 +1,8 @@
 data is saved as json. see relevant examples and other docs for what info is stored where. this talks about how it is all saved, where, and why.
 
-there is a basic idea: load multiple json sources and merge them together. the different sources are under the pyfsobj under these names and are loaded in this order:
-
-1. `default` everything in this directory is read only, has all the default files/maps/assest ect...
-
-2. `local` is any pyfs open-able URL, so see [the pyfs opendir docs.](http://packages.python.org/fs/opener.html#module-fs.opener), this is so that players can load their own maps from any compatible location (eg, load from URL)
-
-3. `saves` this is where all the writes go.
 
 
-directory layout:
+root directory layout:
 
 ```
 |-- assets
@@ -18,8 +11,8 @@ directory layout:
 |   |   `-- tiles
 |   |-- music
 |   `-- sfx
-|-- maps
-    `-- $mapname
+|-- saves
+    `-- $savename
         |-- assets
         |   |-- img
         |   |   |-- robots
@@ -38,14 +31,9 @@ directory layout:
             `-- robots.json
 ```
 
-`saves` / `local` have the same layout, but remember that the `default` dir MUST have everything needed to play. 
 
-`saves` is slightly diffrent in that there are multiple saves, so the strucutre above is in each save folder. eg: `default/maps/$mapname/config.json` == `local/maps/$mapname/config.json` == `saves/$savename/maps/$mapname/config.json`
+note that sometimes special care is needed to merge the different files, so we have the loaders.py take care of loading, merging, then returning the data. in the end of the load, the data should be a single python dictionary. (no support for returning lists, however we can load them and pass of parsing INTO a dict with special cased loaders. see loaders.py/load_grid()), saving is taken care of via savers.py, Note that loaders and savers will hopefully merge later into a better layout of code. get things working first though.
 
+ok, now onto loading assets: these are basically any file that is not in JSON format / does not need merging with other files. so what happens here is that we use a `fs.multifs` that is loaded in the `rootfs/assets`,`saves/$savename/assets/` order, then merged into the single directory for the rootfs `fs.mountfs` as the `assets` directory.
 
-note that sometimes special care is needed to merge the different files, so we have the loaders.py take care of loading, merging, then returning the data. in the end of the load, the data should be a single python dictionary. (no support for returning lists, however we can load them and pass of parsing INTO a dict with special cased loaders. see loaders.py/load_grid())
-
-
-ok, now onto loading assets: these are basically any file that is not in JSON format / does not need merging with other files. so what happens here is that we use a `fs.multifs` that is loaded in the same order as above, then merged into the single `fs.mountfs` as the `assets` directory.
-
-Note for loading / saving of entities: due the fact that entities can move about, each entity must have a 100% unique $EID. This $EID is a json string in the .ejson files. (random generation?). The entity JSON files are all copied over to the $savename and loaded from there, if they already exist, load those. this prevents the whole headache of adding / removing entities as the game plays on.
+Note for loading / saving of entities: due the fact that entities can move about, each entity must have a 100% unique $EID. This $EID is a json string in the .ejson files. (random generation?).

@@ -25,11 +25,11 @@ logging.getLogger('').addHandler(console)
 logger = logging.getLogger('main')
 logger.info('logger set. logging to file:"%s"'%(log_name))
 logger.debug('current path: %s'%os.getcwd())
-logger.debug('currect savedir: %s'%lib.common.savedir)
+logger.debug('current savedir: %s'%lib.common.savedir)
 
 
 def main():
-	m=map.map('maps/test1.map')
+	m=map.map('test1.map')
 
 def editor():
     '''entry point for the map editor'''

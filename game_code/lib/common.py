@@ -14,15 +14,12 @@ else:
     ##TODO:: check if this is the correct save location on MACOSX
     savedir=os.path.expanduser('~/.local/share/revabotica/')
 
+##NOTE::: for testing, over-ride savedir to be local to the code base.
+savedir=os.path.join(os.getcwd(),'saves')
 rootfs =fs.mountfs.MountFS()
 rootfs.mountdir('default',fs.osfs.OSFS('./'))
-rootfs.mountdir('custom',fs.opener.opener.opendir('./custom'))
-#start with setting to same as default, option later to load new path.
-#plan is to have localpath be "http://www.admalledd.com/revabotica" when ready.
-rootfs.mountdir('saves',fs.osfs.OSFS(os.path.join(savedir,'saves'),create=True))
-
-saveid = 'savetest1'#current save name.
-
+rootfs.mountdir('saves',fs.osfs.OSFS(savedir))
+current_language='en'
 #see if we can move all of this stuff to loaders.py, in theory nothing else should need this info.
 
 def p_rents(lo):

@@ -32,4 +32,6 @@ class map(object):
         self.add_layer(loaders.load_grid(self,0),loaders.load_ents(self,0))
 
     def add_layer(self,grid,ent):
-        print ent
+        self.layers.append((grid,ent))
+        import pprint 
+        pprint.pprint(self.layers)
