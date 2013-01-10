@@ -1,0 +1,1 @@
+robots are extentions of entities (in fact, `entities.entity_base.entity_base` is the root class). This means that all the base information is the same (see [here](entity_format.markdown))

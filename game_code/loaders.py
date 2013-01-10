@@ -51,6 +51,9 @@ def load_json(pyfsobj,path):
 def load_ents(mapobj,layer_id):
     return entity_loader(mapobj,layer_id).entities
 
+def load_robots(mapobj,layer_id):
+    return robot_loader(mapobj,layer_id).entities
+
 class json_loader(object):
     def __init__(self,pyfsobj):
         """load json file from relevant location, parses it, and park it at self.json
@@ -145,15 +148,24 @@ class entity_loader(json_loader):
 
         json_loader.__init__(self,mapobj.fsobj)
 
-        e_path = fs.path.join('entities','%s.ejson'%layer_id)
+        e_path = self.entities_path(layer_id)
 
-        js = self.load_json_ro(fs.path.join('save',e_path))
-        import entities        
+        js = self.load_json_ro(e_path)
+        import entities
         
         for eid,ent_js in js.iteritems():
             ent = entities.entity_classes[ent_js['code_class']](eid)
             ent.load_data(self.pyfsobj,ent_js['data'])
             self.entities[eid]=ent
+
+    def entities_path(self,layer_id):
+        '''can be overridden to load from a different location (robots for example)'''
+        return fs.path.join('save','entities','%s.ejson'%layer_id)
+
+class robot_loader(entity_loader):
+    def entities_path(self,layer_id):
+        '''can be overridden to load from a different location (robots for example)'''
+        return fs.path.join('save','robots','%s'%layer_id,'robots.json')
 
 def load_img(fsobj,path):
     logger.warn('image loading not done yet :D. "%s" would have been loaded.'%path)
