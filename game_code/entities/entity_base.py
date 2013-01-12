@@ -4,7 +4,7 @@ logger=logging.getLogger('entities.ebase')
 #import game_code.loaders
 from ..loaders import load_img,load_lang
 
-class ebase(object):
+class entity_base(object):
     def __init__(self,eid):
         self.eid= eid
 
