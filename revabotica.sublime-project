@@ -1,23 +1,4 @@
 {
-    "build_systems":
-    [
-        {
-            "name": "py_main",
-            "target": "subprocess_build",
-            "windows":
-            {
-                "curdir": "F:\\code\\revabotica\\",
-                "exe": "F:\\prog\\pypy-2.0-beta1\\pypy.exe",
-                "fname": "F:\\code\\revabotica\\main.py"
-            },
-            "linux":
-            {
-                "curdir": "/home/admalledd/Documents/code/python/revabotica/",
-                "exe": "/home/admalledd/bin/pypy",
-                "fname": "/home/admalledd/Documents/code/python/revabotica/main.py"
-            }
-        }
-    ],
     "folders":
     [
         {
