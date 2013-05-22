@@ -21,7 +21,7 @@ int SampleAddInt(int i1, int i2)
 void SampleFunction1()
 {
     // insert code here
-    printf("Hello from C, this is your CFFI speaking!");
+    printf("Hello from C, this is your CFFI speaking!\n");
 }
 
 
