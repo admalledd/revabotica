@@ -13,30 +13,21 @@ int SampleFunction2();
 
 
 //mapgen_cell.c
-
-#define TILE_FLOOR ...
-#define TILE_WALL ...
-
-typedef struct {
+typedef struct
+{
     int r1_cutoff, r2_cutoff;
     int reps;
+    int fillprob;
+    int size_x;
+    int size_y;
+    int **grid;
+    int **grid2;
 } generation_params;
 
-int **grid;
-int **grid2;
-
-int fillprob = 40;
-int size_x = 64, size_y = 20;
-generation_params *params;
-
-generation_params *params_set;
-int generations;
-
 int randpick(void);
-void initmap(void);
-void generation(void);
-void delmap(void);
-
+void initmap(generation_params *params);
+void generation(generation_params *params);
+void delmap(generation_params *params);
     ''')
 lib = ffi.dlopen('./libhotloop.so')
 
@@ -44,37 +35,38 @@ lib.SampleFunction1()
 
 def mapgen_cell(size_x,size_y,fillprob,r1_cutoff,r2_cutoff,reps):
     '''Generate a cell map, then return the final string of the map'''
-    def get_map():
+    def get_map(params):
         '''helper to convert map to string'''
         grid_out=[]
-        for y in range(lib.size_y):
+        for y in range(params.size_y):
             grid_out.append([])
-            for x in range(lib.size_x):
-                if lib.grid[y][x] == 1:
+            for x in range(params.size_x):
+                if params.grid[y][x] == 1:
                     grid_out[y].append('#')
-                elif lib.grid[y][x] == 0:
+                elif params.grid[y][x] == 0:
                     grid_out[y].append('.')
             grid_out[y]=''.join(grid_out[y])
+        grid_out.insert(0,str(lib.szof(params)))
         return '\n'.join(grid_out)
 
-    lib.size_x = size_x
-    lib.size_y = size_y
     parms = ffi.new('generation_params *')
     parms.r1_cutoff=r1_cutoff
     parms.r2_cutoff=r2_cutoff
+    parms.size_y = size_y
+    parms.size_x = size_x
     parms.reps =reps
-    lib.params = parms
-    lib.initmap()
+    lib.initmap(parms)
     
     for jj in range(reps):
-        open('tests/test.map.%s'%jj,'w').write(get_map())
+        open('tests/test.map.%s'%jj,'w').write(get_map(parms))
         print 'generation:(%s)'%(jj)
-        lib.generation()
+        lib.generation(parms)
     
-    open('tests/test.map.%s'%(jj+1),'w').write(get_map())
-    out = get_map()
-    lib.delmap()
+    open('tests/test.map.%s'%(jj+1),'w').write(get_map(parms))
+    out = get_map(parms)
+    lib.delmap(parms)
+    
     del parms
     return out
 if __name__ == '__main__':
-    print mapgen_cell(64,64,50,8,8,25)
+    print mapgen_cell(120,120,50,8,8,25)
