@@ -24,8 +24,8 @@ typedef struct
     int **grid2;
 } generation_params;
 
-int randpick(void);
-void initmap(generation_params *params);
+int randpick(generation_params* params);
+void initmap(generation_params* params);
 void generation(generation_params *params);
 void delmap(generation_params *params);
     ''')
@@ -46,17 +46,18 @@ def mapgen_cell(size_x,size_y,fillprob,r1_cutoff,r2_cutoff,reps):
                 elif params.grid[y][x] == 0:
                     grid_out[y].append('.')
             grid_out[y]=''.join(grid_out[y])
-        grid_out.insert(0,str(lib.szof(params)))
+        #grid_out.insert(0,str(lib.szof(params)))
         return '\n'.join(grid_out)
 
     parms = ffi.new('generation_params *')
     parms.r1_cutoff=r1_cutoff
     parms.r2_cutoff=r2_cutoff
+    parms.fillprob = fillprob
     parms.size_y = size_y
     parms.size_x = size_x
     parms.reps =reps
-    lib.initmap(parms)
     
+    lib.initmap(parms)
     for jj in range(reps):
         open('tests/test.map.%s'%jj,'w').write(get_map(parms))
         print 'generation:(%s)'%(jj)
@@ -69,4 +70,4 @@ def mapgen_cell(size_x,size_y,fillprob,r1_cutoff,r2_cutoff,reps):
     del parms
     return out
 if __name__ == '__main__':
-    print mapgen_cell(120,120,50,8,8,25)
+    mapgen_cell(120,120,50,8,8,25)
