@@ -56,10 +56,11 @@ def mapgen_cell(size_x,size_y,fillprob,r1_cutoff,r2_cutoff,reps):
     parms.size_y = size_y
     parms.size_x = size_x
     parms.reps =reps
-    
+
     lib.initmap(parms)
     for jj in range(reps):
-        open('tests/test.map.%s'%jj,'w').write(get_map(parms))
+        with open('tests/test.map.%05d'%jj,'w') as f:
+            f.write(get_map(parms))
         print 'generation:(%s)'%(jj)
         lib.generation(parms)
     
@@ -70,4 +71,4 @@ def mapgen_cell(size_x,size_y,fillprob,r1_cutoff,r2_cutoff,reps):
     del parms
     return out
 if __name__ == '__main__':
-    mapgen_cell(120,120,50,8,8,25)
+    mapgen_cell(120,120,80,8,8,2500)
