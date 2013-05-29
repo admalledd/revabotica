@@ -15,16 +15,7 @@ typedef struct
     int **grid;
     int **grid2;
 } generation_params;
-/*
-int **grid;
-int **grid2;
 
-int fillprob = 40;
-int size_x = 64, size_y = 20;
-generation_params *params;
-
-generation_params *params_set;
-*/
 int randpick(generation_params* params)
 {
     if(rand()%100 < params->fillprob){
