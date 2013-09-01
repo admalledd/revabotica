@@ -14,6 +14,7 @@
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
@@ -41,6 +42,10 @@
 		<Unit filename="mapgen_cell.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="utils.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

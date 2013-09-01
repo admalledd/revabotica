@@ -1,9 +1,10 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define TILE_FLOOR 0
-#define TILE_WALL 1
+#include "utils.h"
+
+#define TILE_FLOOR 46
+#define TILE_WALL 35
 
 typedef struct
 {
@@ -29,9 +30,8 @@ int randpick(generation_params* params)
 void initmap(generation_params* params)
 {
     srand(time(NULL));
-    printf("Init map called\n");
-    printf("x:%d y:%d p:%d h:%d l:%d r:%d\n",
-           params->size_x,params->size_y,params->fillprob,
+    (*py_logger)("Init map called");
+    (*log_ints)("x:%d y:%d p:%d h:%d l:%d r:%d",6,params->size_x,params->size_y,params->fillprob,
            params->r1_cutoff,params->r2_cutoff,params->reps);
     int xi, yi;
     params->grid  = (int**)malloc(sizeof(int*) * params->size_y);
@@ -42,7 +42,7 @@ void initmap(generation_params* params)
         params->grid [yi] = (int*)malloc(sizeof(int) * params->size_x);
         params->grid2[yi] = (int*)malloc(sizeof(int) * params->size_x);
     }
-    printf("grid size:%d bytes\n",2*sizeof(int)*params->size_x*params->size_y);
+    (*log_ints)("grid size:%d bytes",1,2*sizeof(int)*params->size_x*params->size_y);
     for(yi=1; yi<params->size_y-1; yi++)
         for(xi=1; xi<params->size_x-1; xi++)
             params->grid[yi][xi] = randpick(params);
@@ -59,6 +59,12 @@ void initmap(generation_params* params)
 
 void delmap(generation_params* params)
 {
+    int yi=0;
+    for (yi=0; yi<params->size_y;yi++)
+    {
+        free(params->grid[yi]);
+        free(params->grid2[yi]);
+    }
     free(params->grid);
     free(params->grid2);
 }

@@ -9,8 +9,9 @@
 // Feel free to add more files in this project. They will be
 // included in the resulting library.
 
-#include <stdio.h>
+#include "utils.h"
 int rawint = 0;
+
 // A function adding two integers and returning the result
 int SampleAddInt(int i1, int i2)
 {
@@ -21,7 +22,7 @@ int SampleAddInt(int i1, int i2)
 void SampleFunction1()
 {
     // insert code here
-    printf("Hello from C, this is your CFFI speaking!\n");
+    (*py_logger)("Hello from C, this is your CFFI callback test speaking! This means that hotloop.so loaded and *should* work fine with pypy...");
 }
 
 
